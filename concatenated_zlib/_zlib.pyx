@@ -180,13 +180,12 @@ cdef _zlib_decode(const uint8_t[::1] src, outtype):
             if output == NULL:
                 raise MemoryError('output_new failed')
 
+            stream.next_out = <Bytef *> output.data
+            stream.avail_out = 0
+            left = <size_t> output.size
+            size = <size_t> srcsize
+
             while True:
-
-                stream.next_out = <Bytef*> output.data
-                stream.avail_out = 0
-                left = <size_t> output.size
-                size = <size_t> srcsize
-
                 while ret == Z_OK or ret == Z_BUF_ERROR:
 
                     if stream.avail_out == 0:
@@ -219,13 +218,13 @@ cdef _zlib_decode(const uint8_t[::1] src, outtype):
                 if ret != Z_STREAM_END:
                     raise ZlibError('inflate', ret)
 
-                elif size > 0:
+                elif stream.avail_in > 0:
                     ret = inflateReset(&stream)
                     if ret != Z_OK:
                         raise ZlibError('inflateReset', ret)
-                    ret = inflateInit(&stream)
-                    if ret != Z_OK:
-                        raise ZlibError('inflateInit', ret)
+
+                else:
+                    break
 
         out = _create_output(
             outtype, total_out, <const char *> output.data
