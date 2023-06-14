@@ -34,10 +34,23 @@ print(zlibng_concat_decode(c0 + c1))  # returns b"abcefg"
 
 ### benchmarks
 
+To reproduce:
+```shell
+# ON A MAC YOU CAN INSTALL THE DEPENDECIES VIA homebrew
+brew install zlib zlib-ng libdeflate
+# ^^^ install the corresponding *-dev packages on your OS accordingly
+
+git clone --recursive https://github.com/ap--/concatenated-zlib.git
+cd concatenated-zlib/
+python3 -m pip install --user .
+cd bench; python time_load_chunks.py
+```
+
 Run `cd bench; python time_load_chunks.py` to get some crude timing for the different
 approaches... Weirdly enough the cython implementation doesn't currently beat
 the plain python stdlib decompression of individual chunks. Needs more
 investigation...
+
 
 ### related info
 
