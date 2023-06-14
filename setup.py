@@ -31,6 +31,18 @@ setup(
                     "/opt/homebrew/lib/",
                 ]
             ),
+            Extension(
+                "concatenated_zlib._deflate",
+                sources=["concatenated_zlib/_deflate.pyx"],
+                libraries=["deflate"],
+                include_dirs=[
+                    numpy.get_include(),
+                    "/opt/homebrew/include/",
+                ],
+                library_dirs=[
+                    "/opt/homebrew/lib/",
+                ]
+            ),
         ],
         compiler_directives={
             "language_level": 3,
