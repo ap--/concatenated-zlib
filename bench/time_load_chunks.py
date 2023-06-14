@@ -2,8 +2,8 @@ import contextlib
 import itertools
 import time
 import zlib
-import concatenated_zlib._zlib as z
-import concatenated_zlib._zlibng as zng
+from concatenated_zlib import zlib_concat_decode
+from concatenated_zlib import zlibng_concat_decode
 
 c0 = open("./chunk_0000.dat", "rb").read()
 c1 = open("./chunk_0001.dat", "rb").read()
@@ -11,16 +11,16 @@ c1 = open("./chunk_0001.dat", "rb").read()
 d0 = zlib.decompress(c0)
 d1 = zlib.decompress(c1)
 
-assert d0 == z.zlib_decode(c0)
-assert d1 == z.zlib_decode(c1)
-assert (d0 + d1) == z.zlib_decode(c0 + c1)
+assert d0 == zlib_concat_decode(c0)
+assert d1 == zlib_concat_decode(c1)
+assert (d0 + d1) == zlib_concat_decode(c0 + c1)
 
-assert d0 == zng.zlibng_decode(c0)
-assert d1 == zng.zlibng_decode(c1)
-assert (d0 + d1) == zng.zlibng_decode(c0 + c1)
+assert d0 == zlibng_concat_decode(c0)
+assert d1 == zlibng_concat_decode(c1)
+assert (d0 + d1) == zlibng_concat_decode(c0 + c1)
 
-print(d0 + d1 == z.zlib_decode(c0 + c1))
-print(d0 + d1 == zng.zlibng_decode(c0 + c1))
+print(d0 + d1 == zlib_concat_decode(c0 + c1))
+print(d0 + d1 == zlibng_concat_decode(c0 + c1))
 
 @contextlib.contextmanager
 def timeit(label, div=1):
@@ -30,25 +30,24 @@ def timeit(label, div=1):
     finally:
         print(label, "took", (time.monotonic() - t0) / div, "seconds")
 
-with timeit("overhead", 1000):
-    for _ in range(1000):
+with timeit("overhead", div=100):
+    for _ in range(100):
         x = b"".join(itertools.islice(itertools.cycle([c0, c1]), 1000))
-        print(len(x))
 
-with timeit("stdlib.zlib", 1000):
-    for _ in range(1000):
+with timeit("stdlib.zlib", div=100):
+    for _ in range(100):
         _data0 = b"".join(
             zlib.decompress(c)
             for c in itertools.islice(itertools.cycle([c0, c1]), 1000)
         )
 
-with timeit("concatenated_zlib._zlib", 1000):
-    for _ in range(1000):
-        _data1 = z.zlib_decode(b"".join(itertools.islice(itertools.cycle([c0, c1]), 1000)))
+with timeit("zlib_concat_decode", div=100):
+    for _ in range(100):
+        _data1 = zlib_concat_decode(b"".join(itertools.islice(itertools.cycle([c0, c1]), 1000)))
 
-with timeit("concatenated_zlib._zlibng", 1000):
-    for _ in range(1000):
-        _data2 = zng.zlibng_decode(b"".join(itertools.islice(itertools.cycle([c0, c1]), 1000)))
+with timeit("zlibng_concat_decode", div=100):
+    for _ in range(100):
+        _data2 = zlibng_concat_decode(b"".join(itertools.islice(itertools.cycle([c0, c1]), 1000)))
 
 # with timeit("onecall"):
 #    z.zlib_decode(b"".join(itertools.islice(itertools.cycle([c0, c1]), 256000)))
