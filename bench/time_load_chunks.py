@@ -8,7 +8,7 @@ import numpy as np
 from concatenated_zlib import zlib_concat_decode
 from concatenated_zlib import zlibng_concat_decode
 from concatenated_zlib import zlib_multi_decompress
-from concatenated_zlib._deflate import deflate_zlib_decode
+from concatenated_zlib._deflate import libdeflate_zlib_decode
 
 def test():
 
@@ -75,7 +75,7 @@ def bench():
         out = np.empty((1024*12 + 24,), dtype=np.uint8)
         for _ in range(100):
             _data4 = b"".join(
-                deflate_zlib_decode(c, out)
+                libdeflate_zlib_decode(c, out)
                 for c in itertools.islice(itertools.cycle([c0, c1]), 1000)
             )
 
