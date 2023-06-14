@@ -6,11 +6,6 @@ from setuptools.extension import Extension
 
 setup(
     name="concatenated_zlib",
-    version="v0.0.1",
-    license="BSD",
-    description="abc",
-    python_requires=">=3.8",
-    packages=["concatenated_zlib"],
     ext_modules=cythonize(
         [
             Extension(
