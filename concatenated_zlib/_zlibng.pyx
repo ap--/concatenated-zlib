@@ -41,7 +41,7 @@ __version__ = '2023.3.16'
 
 include '_shared.pxi'
 
-from zlib_ng cimport *
+from .zlib_ng cimport *
 
 from  libc.math cimport ceil
 

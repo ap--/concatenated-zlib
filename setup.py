@@ -28,7 +28,13 @@ setup(
                 "concatenated_zlib._zlibng",
                 sources=["concatenated_zlib/_zlibng.pyx"],
                 libraries=["z-ng"],
-                include_dirs=[numpy.get_include()],
+                include_dirs=[
+                    numpy.get_include(),
+                    "/opt/homebrew/include/",
+                ],
+                library_dirs=[
+                    "/opt/homebrew/lib/",
+                ]
             ),
         ],
         compiler_directives={
