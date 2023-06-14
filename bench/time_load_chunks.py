@@ -71,7 +71,7 @@ def bench():
         for _ in range(10):
             _data3 = zlib_multi_decompress(itertools.islice(itertools.cycle([c0, c1]), 1000))
 
-    with timeit("zlib_multi_decompress", div=100):
+    with timeit("libdeflate_zlib_decompress", div=100):
         out = np.empty((1024*12 + 24,), dtype=np.uint8)
         for _ in range(100):
             _data4 = b"".join(

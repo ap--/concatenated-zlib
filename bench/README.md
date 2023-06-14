@@ -13,6 +13,6 @@ stdlib.zlib took 0.029090170830022542 seconds
 zlib_concat_decode took 0.029393986669892912 seconds
 zlibng_concat_decode took 0.028708101249940228 seconds
 zlib_multi_decompress took 0.6786801500013098 seconds
-zlib_multi_decompress took 0.01889676667022286 seconds
+libdeflate_zlib_decompress took 0.01889676667022286 seconds
 
 ```
