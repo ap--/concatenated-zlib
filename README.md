@@ -42,7 +42,9 @@ brew install zlib zlib-ng libdeflate
 
 git clone --recursive https://github.com/ap--/concatenated-zlib.git
 cd concatenated-zlib/
-python3 -m pip install --user .
+python3 -m venv venv
+source venv/bin/activate
+python3 -m pip install .
 cd bench; python time_load_chunks.py
 ```
 
